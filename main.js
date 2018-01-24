@@ -251,7 +251,7 @@ function createWindow() {
   // mainWindow.loadURL('http://acdc0.asiaa.sinica.edu.tw:47569/');
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {

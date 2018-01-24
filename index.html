@@ -11,6 +11,7 @@
     .flex-container {
       display: flex;
       justify-content: center;
+      align-items: center;
     }
 
     * {
@@ -50,10 +51,14 @@
       }
     </script>
 
-  <div className="flex-container" style="background-color:blue;">
-    <div style="background-color:green; width:300px">
-        <button type="button" onclick="naviToLocal();">Local mode!</button>
-        <button type="button" onclick="naviToRemote();">Server mode!</button>
+  <div class="flex-container" style="background-color:#81D8D0;height: 600px;">
+    <div>
+        <div style="margin: 25px;">
+          <button type="button" onclick="naviToLocal();">Local mode!</button>
+        </div>
+        <div style="margin: 25px;">
+          <button type="button" onclick="naviToRemote();">Server mode!</button>
+        </div>
     </div>
 
   </div>
