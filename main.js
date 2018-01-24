@@ -121,10 +121,15 @@ function addMenus() {
            // if (contextMenu.items[4].submenu.items[0] === item ) {
            //   console.log("click first item");
            // }
-           contextMenu.items[4].submenu.items[1].checked = false;//!contextMenu.items[4].submenu.items[1].checked
-           // item.checked = false;//!item.checked;
-           mainWindow.loadURL(localURL);
-            // mote.getCurrentWindow().loadURL('https://github.com')
+
+           if ( item.checked == true) {
+             contextMenu.items[4].submenu.items[1].checked = false;//!contextMenu.items[4].submenu.items[1].checked
+             // item.checked = false;//!item.checked;
+             mainWindow.loadURL(localURL);
+              // mote.getCurrentWindow().loadURL('https://github.com')
+            } else {
+              item.checked = true;
+            }
 
           }
         }, {
@@ -141,11 +146,13 @@ function addMenus() {
             //   console.log("click first item");
             // }
 
-            contextMenu.items[4].submenu.items[0].checked = false;//!contextMenu.items[4].submenu.items[0].checked;
 
-
-            mainWindow.loadURL(remoteURL);
-
+            if ( item.checked == true) {
+              contextMenu.items[4].submenu.items[0].checked = false;//!contextMenu.items[4].submenu.items[0].checked;
+              mainWindow.loadURL(remoteURL);
+            } else {
+              item.checked = true;
+            }
           }
         }
         // {role: 'toggledevtools'},
