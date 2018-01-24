@@ -27,16 +27,26 @@
     Chromium <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>. -->
     <script>
+      const {ipcRenderer} = require('electron')
+
       function naviToLocal() {
         // alert('Local mode!')
         const url = "http://localhost:3000/";
         location.href = url;
+        ipcRenderer.send('change-to-local')
       }
       function naviToRemote() {
         // alert('Local mode!')
 
         const url = "http://acdc0.asiaa.sinica.edu.tw:47569/";
         location.href = url;
+
+        //TODO:
+        //nofity main process to change the checked status of remote menu
+        // const {BrowserWindow} = require('electron').remote
+        ipcRenderer.send('change-to-remote')
+
+        // console.log(BrowserWindow);
       }
     </script>
 
