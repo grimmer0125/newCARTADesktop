@@ -1,0 +1,17 @@
+{
+  "name": "CARTA-Desktop",
+  "version": "1.0.0",
+  "description": "Desktop ver. of new CARTA",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/CARTAvis/newCARTADesktop",
+  "keywords": [
+    "Electron"
+  ],
+  "author": "GitHub",
+  "devDependencies": {
+    "electron": "~1.7.8"
+  }
+}
