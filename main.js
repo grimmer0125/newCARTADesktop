@@ -15,6 +15,8 @@ const localURL = 'http://localhost:3000/';
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let localWindow
+let remoteWindow
 let contextMenu
 const {ipcMain} = require('electron')
 
@@ -23,13 +25,19 @@ ipcMain.on('change-to-remote', (event, arg)=> {
 
   contextMenu.items[4].submenu.items[0].checked = false
   contextMenu.items[4].submenu.items[1].checked = true
+
+  naviToRemoteWindow();
+
 })
 
 ipcMain.on('change-to-local', (event, arg)=> {
-  console.log("change to remote");
+  console.log("change to local");
 
   contextMenu.items[4].submenu.items[0].checked = true
   contextMenu.items[4].submenu.items[1].checked = false
+
+  naviToLocalWindow();
+
 })
 
 // function changeToRemote() {
@@ -125,7 +133,9 @@ function addMenus() {
            if ( item.checked == true) {
              contextMenu.items[4].submenu.items[1].checked = false;//!contextMenu.items[4].submenu.items[1].checked
              // item.checked = false;//!item.checked;
-             mainWindow.loadURL(localURL);
+
+             naviToLocalWindow();
+             // mainWindow.loadURL(localURL);
               // mote.getCurrentWindow().loadURL('https://github.com')
             } else {
               item.checked = true;
@@ -149,7 +159,7 @@ function addMenus() {
 
             if ( item.checked == true) {
               contextMenu.items[4].submenu.items[0].checked = false;//!contextMenu.items[4].submenu.items[0].checked;
-              mainWindow.loadURL(remoteURL);
+              naviToRemoteWindow();
             } else {
               item.checked = true;
             }
@@ -239,7 +249,38 @@ function addMenus() {
 
 }
 
-function createWindow() {
+function naviToLocalWindow() {
+  if (!localWindow) {
+    console.log("create local");
+    localWindow = new BrowserWindow({width: 1440, height: 800})
+    localWindow.loadURL(localURL);
+  }
+
+  localWindow.show();
+  if (remoteWindow) {
+    remoteWindow.hide();
+  }
+
+  mainWindow.hide();
+}
+
+function naviToRemoteWindow() {
+  if (!remoteWindow) {
+    console.log("create remote");
+    remoteWindow = new BrowserWindow({width: 1440, height: 800})
+    remoteWindow.loadURL(remoteURL);
+  }
+
+  remoteWindow.show();
+
+  if(localWindow) {
+    localWindow.hide();
+  }
+  mainWindow.hide();
+
+}
+
+function createMainWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 1440, height: 800})
 
@@ -272,7 +313,7 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', createMainWindow)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
@@ -287,7 +328,8 @@ app.on('activate', function() {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    createWindow()
+    console.log("createMainWindow in activate")
+    createMainWindow()
   }
 })
 
