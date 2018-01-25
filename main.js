@@ -19,6 +19,9 @@ global.servers = {
 // global.localURL = 'http://localhost:3000/';
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
+
+const defaultWidth = 1280;
+const defaultHeight = 720;
 let mainWindow
 let localWindow
 let remoteWindow
@@ -274,7 +277,7 @@ function addMenus(customRemoteURL) {
 function naviToLocalWindow() {
   if (!localWindow) {
     console.log("create local");
-    localWindow = new BrowserWindow({width: 1440, height: 800})
+    localWindow = new BrowserWindow({width: defaultWidth, height: defaultHeight})
     localWindow.loadURL(servers.localURL);
   }
 
@@ -289,7 +292,7 @@ function naviToLocalWindow() {
 function naviToRemoteWindow() {
   if (!remoteWindow) {
     console.log("create remote");
-    remoteWindow = new BrowserWindow({width: 1440, height: 800})
+    remoteWindow = new BrowserWindow({width: defaultWidth, height: defaultHeight})
     remoteWindow.loadURL(servers.remoteURL);
   }
 
@@ -304,7 +307,7 @@ function naviToRemoteWindow() {
 
 function createMainWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1440, height: 800})
+  mainWindow = new BrowserWindow({width: 1280, height: 720})
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
