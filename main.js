@@ -64,9 +64,8 @@ ipcMain.on('change-to-local', (event, arg)=> {
 //
 // }
 
-
-
-//selector? role?
+// selector: seems to be deprecated
+// role: https://github.com/electron/electron/blob/master/docs/api/menu-item.md#roles
 function addMenus(customRemoteURL) {
   console.log("start adding menus !!!!");
 
@@ -257,6 +256,7 @@ function addMenus(customRemoteURL) {
       }, {
         role: 'minimize'
       }, {
+        label: 'Maximize (zoom)',
         role: 'zoom'
       }, {
         type: 'separator'
