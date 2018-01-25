@@ -27,38 +27,59 @@
   <!-- We are using Node.js <script>document.write(process.versions.node)</script>,
     Chromium <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>. -->
-    <script>
-      const {ipcRenderer} = require('electron')
+  <script>
+    const {
+      ipcRenderer
+    } = require('electron')
 
-      function naviToLocal() {
-        // alert('Local mode!')
-        // const url = "http://localhost:3000/";
-        // location.href = url;
-        ipcRenderer.send('change-to-local')
-      }
-      function naviToRemote() {
-        // alert('Local mode!')
+    function changeRemoteURL() {
+      const remote = require('electron').remote;
+      const servers = remote.getGlobal("servers");
+      // console.log("ip:", ip);
+      const remoteURLinput = document.getElementById("remoteURLinput");
+      console.log(remoteURLinput.value);
+      // servers.remoteURL = remoteURLinput.value;
 
-        // const url = "http://acdc0.asiaa.sinica.edu.tw:47569/";
-        // location.href = url;
+      ipcRenderer.send('changeRemoteURL', remoteURLinput.value);
+    }
 
-        //TODO:
-        //nofity main process to change the checked status of remote menu
-        // const {BrowserWindow} = require('electron').remote
-        ipcRenderer.send('change-to-remote')
+    function naviToLocal() {
+      // alert('Local mode!')
+      // const url = "http://localhost:3000/";
+      // location.href = url;
+      ipcRenderer.send('change-to-local')
+    }
 
-        // console.log(BrowserWindow);
-      }
-    </script>
+    function naviToRemote() {
+      // alert('Local mode!')
 
-  <div class="flex-container" style="background-color:#81D8D0;height: 600px;">
-    <div>
-        <div style="margin: 25px;">
-          <button type="button" onclick="naviToLocal();">Local mode!</button>
+      // const url = "http://acdc0.asiaa.sinica.edu.tw:47569/";
+      // location.href = url;
+
+      //TODO:
+      //nofity main process to change the checked status of remote menu
+      // const {BrowserWindow} = require('electron').remote
+      ipcRenderer.send('change-to-remote')
+
+      // console.log(BrowserWindow);
+    }
+  </script>
+
+  <div class="flex-container" style="background-color:#81D8D0;height: 600px">
+    <div style='width:800px'>
+      <div style="margin: 25px;">
+        <button type="button" onclick="naviToLocal();">Choose Local mode!</button>
+      </div>
+      <div style="margin: 25px;">
+        <button type="button" onclick="naviToRemote();">Choose Server mode!</button>
+
+      </div>
+      <div style="display: flex;margin: 25px;" >
+        <div style="width:315px">
+          <input width="400" id="remoteURLinput" type="text" style='width:90%'>
         </div>
-        <div style="margin: 25px;">
-          <button type="button" onclick="naviToRemote();">Server mode!</button>
-        </div>
+        <button onclick="changeRemoteURL()">Save remote URL</button>
+      </div>
     </div>
 
   </div>
@@ -66,6 +87,12 @@
   <script>
     // You can also require other files to run in this process
     require('./renderer.js')
+
+    const remote = require('electron').remote;
+    const ip = remote.getGlobal("servers").remoteURL;
+    console.log("ip:", ip);
+    const remoteURLinput = document.getElementById("remoteURLinput");
+    remoteURLinput.value = ip;
   </script>
 </body>
 

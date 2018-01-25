@@ -9,9 +9,14 @@ const url = require('url')
 
 const {Menu} = require('electron')
 
+// = "This can be accessed anywhere!";
 
-const remoteURL = 'http://acdc0.asiaa.sinica.edu.tw:47569/';
-const localURL = 'http://localhost:3000/';
+global.servers = {
+  localURL:'http://localhost:3000/',
+  remoteURL:'http://acdc0.asiaa.sinica.edu.tw:47569/'
+};
+// global.remoteURL  = 'dummy';//'http://acdc0.asiaa.sinica.edu.tw:47569/';
+// global.localURL = 'http://localhost:3000/';
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -30,6 +35,16 @@ ipcMain.on('change-to-remote', (event, arg)=> {
 
 })
 
+ipcMain.on('changeRemoteURL', (event, arg)=> {
+  console.log("changeRemoteURL:", arg);
+  servers.remoteURL = arg;
+  addMenus(arg);
+  // contextMenu.items[4].submenu.items[1].label=arg;
+  // console.log(contextMenu.items[4].submenu.items);
+
+})
+
+
 ipcMain.on('change-to-local', (event, arg)=> {
   console.log("change to local");
 
@@ -40,12 +55,16 @@ ipcMain.on('change-to-local', (event, arg)=> {
 
 })
 
+
+
 // function changeToRemote() {
 //
 // }
 
+
+
 //selector? role?
-function addMenus() {
+function addMenus(customRemoteURL) {
   console.log("start adding menus !!!!");
 
   const template = [
@@ -117,7 +136,7 @@ function addMenus() {
         //   selector: 'redo:'
         // }
         {
-          label: 'Local:'+localURL,
+          label: 'Local:'+servers.localURL,
           // role: 'local',
           type: 'checkbox', checked: false,
           click: function(item, BrowserWindow) {
@@ -143,7 +162,7 @@ function addMenus() {
 
           }
         }, {
-          label: 'Remote:'+remoteURL,
+          label: 'Remote:'+servers.remoteURL,
           type: 'checkbox', checked: false,
 
           // role: 'remote',
@@ -244,6 +263,9 @@ function addMenus() {
     ]
   }
 
+  if (customRemoteURL) {
+    template[3].submenu[0].label = customRemoteURL;
+  }
   contextMenu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(contextMenu)
 
@@ -253,7 +275,7 @@ function naviToLocalWindow() {
   if (!localWindow) {
     console.log("create local");
     localWindow = new BrowserWindow({width: 1440, height: 800})
-    localWindow.loadURL(localURL);
+    localWindow.loadURL(servers.localURL);
   }
 
   localWindow.show();
@@ -268,7 +290,7 @@ function naviToRemoteWindow() {
   if (!remoteWindow) {
     console.log("create remote");
     remoteWindow = new BrowserWindow({width: 1440, height: 800})
-    remoteWindow.loadURL(remoteURL);
+    remoteWindow.loadURL(servers.remoteURL);
   }
 
   remoteWindow.show();
