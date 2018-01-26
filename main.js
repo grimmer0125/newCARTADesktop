@@ -20,6 +20,7 @@ global.servers = {
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 
+let menuServerIndex = 3;
 const defaultWidth = 1280;
 const defaultHeight = 720;
 let mainWindow
@@ -31,8 +32,8 @@ const {ipcMain} = require('electron')
 ipcMain.on('change-to-remote', (event, arg)=> {
   console.log("change to remote");
 
-  contextMenu.items[4].submenu.items[0].checked = false
-  contextMenu.items[4].submenu.items[1].checked = true
+  contextMenu.items[menuServerIndex].submenu.items[0].checked = false
+  contextMenu.items[menuServerIndex].submenu.items[1].checked = true
 
   naviToRemoteWindow();
 
@@ -41,7 +42,7 @@ ipcMain.on('change-to-remote', (event, arg)=> {
 ipcMain.on('changeRemoteURL', (event, arg)=> {
   console.log("changeRemoteURL:", arg);
   servers.remoteURL = arg;
-  addMenus(arg);
+  addMenus();
   // contextMenu.items[4].submenu.items[1].label=arg;
   // console.log(contextMenu.items[4].submenu.items);
 
@@ -51,8 +52,8 @@ ipcMain.on('changeRemoteURL', (event, arg)=> {
 ipcMain.on('change-to-local', (event, arg)=> {
   console.log("change to local");
 
-  contextMenu.items[4].submenu.items[0].checked = true
-  contextMenu.items[4].submenu.items[1].checked = false
+  contextMenu.items[menuServerIndex].submenu.items[0].checked = true
+  contextMenu.items[menuServerIndex].submenu.items[1].checked = false
 
   naviToLocalWindow();
 
@@ -66,7 +67,7 @@ ipcMain.on('change-to-local', (event, arg)=> {
 
 // selector: seems to be deprecated
 // role: https://github.com/electron/electron/blob/master/docs/api/menu-item.md#roles
-function addMenus(customRemoteURL) {
+function addMenus() {
   console.log("start adding menus !!!!");
 
   const template = [
@@ -152,7 +153,7 @@ function addMenus(customRemoteURL) {
            // }
 
            if ( item.checked == true) {
-             contextMenu.items[4].submenu.items[1].checked = false;//!contextMenu.items[4].submenu.items[1].checked
+             contextMenu.items[menuServerIndex].submenu.items[1].checked = false;//!contextMenu.items[4].submenu.items[1].checked
              // item.checked = false;//!item.checked;
 
              naviToLocalWindow();
@@ -179,7 +180,7 @@ function addMenus(customRemoteURL) {
 
 
             if ( item.checked == true) {
-              contextMenu.items[4].submenu.items[0].checked = false;//!contextMenu.items[4].submenu.items[0].checked;
+              contextMenu.items[menuServerIndex].submenu.items[0].checked = false;//!contextMenu.items[4].submenu.items[0].checked;
               naviToRemoteWindow();
             } else {
               item.checked = true;
@@ -209,6 +210,7 @@ function addMenus(customRemoteURL) {
   ]
 
   if (process.platform === 'darwin') {
+    menuServerIndex=4;
     template.unshift({
       label: app.getName(),
       submenu: [
@@ -266,9 +268,6 @@ function addMenus(customRemoteURL) {
     ]
   }
 
-  if (customRemoteURL) {
-    template[3].submenu[0].label = customRemoteURL;
-  }
   contextMenu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(contextMenu)
 
