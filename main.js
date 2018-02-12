@@ -21,8 +21,8 @@ global.servers = {
 // be closed automatically when the JavaScript object is garbage collected.
 
 let menuServerIndex = 3;
-const defaultWidth = 1280;
-const defaultHeight = 720;
+const defaultWidth = 1920;
+const defaultHeight = 1080;
 let mainWindow
 let localWindow
 let remoteWindow
@@ -306,7 +306,7 @@ function naviToRemoteWindow() {
 
 function createMainWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1280, height: 720})
+  mainWindow = new BrowserWindow({width: 800, height: 700})
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({

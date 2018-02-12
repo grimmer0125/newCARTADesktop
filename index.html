@@ -6,10 +6,12 @@
   <title>new CARTA Desktop</title>
 
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
   <style>
     .flex-container {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
     }
@@ -65,23 +67,28 @@
     }
   </script>
 
-  <div class="flex-container" style="background-color:#81D8D0;height: 600px">
-    <div style='width:800px'>
-      <div style="margin: 25px;">
-        <button type="button" onclick="naviToLocal();">Choose Local mode!</button>
+  <div class="flex-container" style="width:800px","height: 700px">
+      <div class="flex-item" style="margin: 30px;">
+        <img src="carta_logo_v2.png" style="width: 200px","height:200px">
       </div>
-      <div style="margin: 25px;">
-        <button type="button" onclick="naviToRemote();">Choose Server mode!</button>
-
+      <div style="margin: 15px;">
+        <button type="button" class="btn btn-primary" color="red" onclick="naviToLocal();">Local mode</button>
       </div>
-      <div style="display: flex;margin: 25px;" >
+      <div style="margin: 15px;">
+        <button type="button" class="btn btn-primary" onclick="naviToRemote();">Remote server mode</button>
+      </div>
+      <div style="display: flex;margin: 15px;" >
         <div style="width:315px">
-          <input width="400" id="remoteURLinput" type="text" style='width:90%'>
+          <input width="400" id="remoteURLinput" type="text" style='width:95%'>
         </div>
-        <button onclick="changeRemoteURL()">Save remote URL</button>
+        <button class="btn btn-primary" onclick="changeRemoteURL()">Save remote URL</button>
       </div>
+      <div style="display: flex; justify-content:center; text-align:left; width:750px; margin:20px">
+        Welcome to a pre-release version of newCARTA, the Cube Analysis and Rendering Tool for Astronomy.<br><br>
+        Click "Local mode" to run newCARTA directly from this computer (Note: For Local mode, Docker needs to be installed).<br>
+        Click "Remote server mode" to connect to an instance of newCARTA running remotely on another computer.
+        The URL of the remote computer can be set using the text box.
     </div>
-
   </div>
 
   <script>
