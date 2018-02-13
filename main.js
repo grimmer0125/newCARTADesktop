@@ -6,6 +6,8 @@ const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 const url = require('url')
+var spawn = require('child_process').spawn;
+const child_process = require("child_process");
 
 const {Menu} = require('electron')
 
@@ -276,9 +278,19 @@ function addMenus() {
 function naviToLocalWindow() {
   if (!localWindow) {
     console.log("create local");
+    // Use Docker - Caveat: Docker needs to be pre-installed on the user's machine
+    var docker = "/usr/local/bin/docker";
+    var args = ["run", "-p", "3000:3000", "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v2", "/start.sh"];
+    var child = spawn(docker, args, {});
+
+    // Give some time for CARTA and Meteor to start up in the Docker Image 
+    // (maybe not be enough time the first time it is run as the docker image will need to be downloaded first).
+    // Better thing to do in next version: Wait for `websocket onopen done` to appear in the console.log and then continue
+    child_process.execSync("sleep 45");
+
     localWindow = new BrowserWindow({width: defaultWidth, height: defaultHeight})
     localWindow.loadURL(servers.localURL);
-  }
+ }
 
   localWindow.show();
   if (remoteWindow) {
@@ -330,7 +342,11 @@ function createMainWindow() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    mainWindow = null
+  mainWindow = null
+    // Close the Docker image
+    var docker = "/usr/local/bin/docker";
+    var args = ["rm", "-f", "CARTA"];
+    child_process.spawn(docker, args, {});
   })
 }
 
@@ -343,7 +359,11 @@ app.on('ready', createMainWindow)
 app.on('window-all-closed', function() {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
+    //Close the Docker image
+    var docker = "/usr/local/bin/docker";
+    var args = ["rm", "-f", "CARTA"];
+    child_process.spawn(docker, args, {});
+   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
