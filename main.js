@@ -279,8 +279,18 @@ function naviToLocalWindow() {
   if (!localWindow) {
     console.log("create local");
     // Use Docker - Caveat: Docker needs to be pre-installed on the user's machine
+
+  if (process.platform === 'darwin') {
+    console.log("Mac system detected");
     var docker = "/usr/local/bin/docker";
-    var args = ["run", "-p", "3000:3000", "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v2", "/start.sh"];
+    var args = ["run", "-p", "3000:3000", "-e", "DISPLAY=docker.for.mac.localhost:0", "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v2", "/start.sh"];
+  };
+    if (process.platform === 'linux') {
+    console.log("Linux system detected");
+    var docker = "/usr/bin/docker";
+    var args = ["run", "-p", "3000:3000", "-e", "DISPLAY=$DISPLAY", "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v2", "/start.sh"];
+    };
+
     var child = spawn(docker, args, {});
 
     // Give some time for CARTA and Meteor to start up in the Docker Image 
@@ -344,7 +354,12 @@ function createMainWindow() {
     // when you should delete the corresponding element.
   mainWindow = null
     // Close the Docker image
-    var docker = "/usr/local/bin/docker";
+    if (process.platform === 'darwin') {
+      var docker = "/usr/local/bin/docker";
+    };
+    if (process.platform === 'linux') {
+      var docker = "/usr/bin/docker";
+    };
     var args = ["rm", "-f", "CARTA"];
     child_process.spawn(docker, args, {});
   })
@@ -360,9 +375,15 @@ app.on('window-all-closed', function() {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
     //Close the Docker image
-    var docker = "/usr/local/bin/docker";
+    if (process.platform === 'darwin') {
+      var docker = "/usr/local/bin/docker";
+    };
+    if (process.platform === 'linux') {
+      var docker = "/usr/bin/docker";
+    };
     var args = ["rm", "-f", "CARTA"];
     child_process.spawn(docker, args, {});
+
    if (process.platform !== 'darwin') {
     app.quit()
   }
