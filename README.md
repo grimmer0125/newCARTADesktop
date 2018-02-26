@@ -20,7 +20,7 @@ Test versions to try:
 4. `sudo usermod -a -G docker $USER` so the normal user has permission to run docker.
 5. Log out and in, or reboot system, to enable Step 4.
 6. `docker pull ajmasiaa/newcarta_meteor_v2` to download the docker image.
-7. `xhost +` to allow x11 to work in the docker container
+7. `xhost +` to allow x11 to work in the docker container (`sudo setenforce 0` may also be necessary)
 
 #### Easy way to install docker on Mac:
 1. Install Docker from the dmg: https://download.docker.com/mac/stable/Docker.dmg 
