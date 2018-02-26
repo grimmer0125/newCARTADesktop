@@ -13,5 +13,8 @@
   "author": "GitHub",
   "devDependencies": {
     "electron": "~1.7.8"
+  },
+  "dependencies": {
+    "shelljs": "^0.8.1"
   }
 }
