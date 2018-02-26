@@ -4,10 +4,13 @@ const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
+
 const path = require('path')
 const url = require('url')
 var spawn = require('child_process').spawn;
 const child_process = require("child_process");
+
+var shell = require('shelljs');
 
 const {Menu} = require('electron')
 
@@ -284,14 +287,22 @@ function naviToLocalWindow() {
     console.log("Mac system detected");
     var docker = "/usr/local/bin/docker";
     var args = ["run", "-p", "3000:3000", "-e", "DISPLAY=docker.for.mac.localhost:0", "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v2", "/start.sh"];
+    var child = spawn(docker, args, {});
   };
     if (process.platform === 'linux') {
     console.log("Linux system detected");
-    var docker = "/usr/bin/docker";
-    var args = ["run", "-p", "3000:3000", "-e", "DISPLAY=$DISPLAY", "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v2", "/start.sh"];
-    };
+//    var docker = "/usr/bin/docker";
+//    var args = ["run", "-p", "3000:3000", "-e", "DISPLAY=$DISPLAY", "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v2", "/start.sh"];
+//    var child = spawn(docker, args, {});
 
-    var child = spawn(docker, args, {});
+     // On Linux, the $DISPLAY variable does not work correctly when passed through the child spawn function.
+     // We can not just define it (e.g. DISPLAY=:0) because on ubuntu it seems to be :0, but on Fedora it seems to be :1
+     // Therefore, for now, we can try calling the docker command from a shell script file instead.
+
+     shell.config.execPath = shell.which('node');
+     shell.exec("bash docker-start-linux.sh");
+
+  };
 
     // Give some time for CARTA and Meteor to start up in the Docker Image 
     // (maybe not be enough time the first time it is run as the docker image will need to be downloaded first).
