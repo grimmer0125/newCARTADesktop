@@ -5,9 +5,9 @@ The idea is to interface with newCARTA through an [Electron App](https://electro
 
 Test versions to try:
 
-`http://alma.asiaa.sinica.edu.tw/_downloads/newCARTAv0.1.dmg`
+`http://alma.asiaa.sinica.edu.tw/_downloads/newCARTAv2.dmg`
 
-`http://alma.asiaa.sinica.edu.tw/_downloads/newCARTA-desktop-v1-linux-x64.tar.gz`
+`http://alma.asiaa.sinica.edu.tw/_downloads/CARTA-Desktop-linux-v2.tar.gz`
 
 ---
 
@@ -24,7 +24,7 @@ Test versions to try:
 
 #### Easy way to install docker on Mac:
 1. Install Docker from the dmg: https://download.docker.com/mac/stable/Docker.dmg 
-2. docker pull ajmasiaa/newcarta_meteor_v2
+2. `docker pull ajmasiaa/newcarta_meteor_v2`
 
 ---
 
@@ -61,9 +61,9 @@ Note: On CentOS7 and Fedora (and probably RedHat), libXScrnSaver must be install
 
 For Mac, an installable dmg is created (non-signed). For Linux, a directory is created that can be zipped later. The Linux version can be created on a Mac, plus the Linux version is universal between RedHat and Ubuntu based systems.
 
-1. Install the electron-packager: `npm install --save-dev electron-packager`
-2. Create Mac App: `electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds`
-3. Create Linux App: `electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=carta_logo_v2.png --prune=true --out=release-builds`
+1. Install the electron-packager: `meteor npm install electron-packager -g`
+2. Create Mac App: `meteor electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds`
+3. Create Linux App: `meteor electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=carta_logo_v2.png --prune=true --out=release-builds`
 
 The packaged apps can be found in the `newCARTADesktop/release-builds/` directory.
 
@@ -71,7 +71,7 @@ The packaged apps can be found in the `newCARTADesktop/release-builds/` director
 
 ### Note: This is work in progress. Here is an incomplete list of things to do:
 
-1. Docker and x11 can be problematic, particularly on Linux. Sometimes there can be errors such as `QXcbConnection: Could not connect to display`. I think setting `-e DISPLAY=$DISPLAY` and running `xhost +` at first helps in most cases, but I'm still investigating a guaranteed way for it to work everytime. On Mac, I think `-e DISPLAY=docker.for.mac.host.internal:0` will work every time, but still need to do more testing.
+1. Docker and x11 can be problematic, particularly on Linux. Sometimes there can be errors such as `QXcbConnection: Could not connect to display`. I think setting `-e DISPLAY=$DISPLAY` and running `xhost +` at first helps in most cases, but I'm still investigating a guaranteed way for it to work everytime. On Mac, I think `-e DISPLAY=docker.for.mac.host.internal:0` will work every time, but still need to do more testing. On Linux, it now queries the system for $DISPLAY and uses whatever that value is in the docker command.
 2. If possible, get the app to install Docker and download the image if not already present.
 3. Currently there is a fixed pause (`child_process.execSync("sleep 45")`) after clicking Local Mode in order to give the docker image time to start up. This could be improved by having it monitoring the output log and waiting until `websocket onopen done` comes up before continuing.
 4. Reduce size of the docker image. It is currently quite large at 2.79GB (`ajmasiaa/newcarta_meteor_v2`). Hopefully it will be possible to strip out uneeded files to reduce the size.
