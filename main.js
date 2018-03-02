@@ -10,7 +10,7 @@ const url = require('url')
 var spawn = require('child_process').spawn;
 const child_process = require("child_process");
 
-var shell = require('shelljs');
+let displayvar //Setting a global vairable
 
 const {Menu} = require('electron')
 
@@ -291,18 +291,18 @@ function naviToLocalWindow() {
   };
     if (process.platform === 'linux') {
     console.log("Linux system detected");
-//    var docker = "/usr/bin/docker";
-//    var args = ["run", "-p", "3000:3000", "-e", "DISPLAY=$DISPLAY", "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v2", "/start.sh"];
-//    var child = spawn(docker, args, {});
 
-     // On Linux, the $DISPLAY variable does not work correctly when passed through the child spawn function.
-     // We can not just define it (e.g. DISPLAY=:0) because on ubuntu it seems to be :0, but on Fedora it seems to be :1
-     // Therefore, for now, we can try calling the docker command from a shell script file instead.
+    // Find the correct $DISPLAY variable for the Linux system
+    var exec = require('child_process').exec;
+    exec("echo $DISPLAY", function(error, stdout) {
+    var displayvar = "DISPLAY="+stdout;
+    console.log(displayvar);
+    });
 
-     shell.config.execPath = shell.which('node');
-     shell.exec("bash docker-start-linux.sh");
-
-  };
+    var docker = "/usr/bin/docker";
+    var args = ["run", "-p", "3000:3000", "-e", displayvar, "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v2", "/start.sh"];
+    var child = spawn(docker, args, {});
+    };
 
     // Give some time for CARTA and Meteor to start up in the Docker Image 
     // (maybe not be enough time the first time it is run as the docker image will need to be downloaded first).
