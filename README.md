@@ -13,7 +13,7 @@ Test versions to try:
 
 ### Note: To run in Local Mode, Docker  needs to be installed on your system
 
-#### Easy way to install docker on Linux:
+#### Easy way to install docker on Linux (Ubuntu, CentOS7):
 1. `curl -fsSL https://get.docker.com/ | sh` (Need to enter root password).
 2. `sudo systemctl start docker`
 3. `sudo systemctl enable docker` for docker to start automatically on boot.
@@ -21,6 +21,14 @@ Test versions to try:
 5. Log out and in, or reboot system, to enable Step 4.
 6. `docker pull ajmasiaa/newcarta_meteor_v2` to download the docker image.
 7. `xhost +` to allow x11 to work in the docker container (`sudo setenforce 0` may also be necessary)
+
+##### Note: the script in Step 1 doesn't work for CentOS6. Instead do the following to install Docker:
+1. `rpm -iUvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm` to install EPEL repositories.
+2. `yum -y install docker-io`
+3. `service docker start && chkconfig docker on`
+4. `groupadd docker`
+5. `usermod -aG docker $USER`
+6. Log out and in, or reboot.
 
 #### Easy way to install docker on Mac:
 1. Install Docker from the dmg: https://download.docker.com/mac/stable/Docker.dmg 
