@@ -286,7 +286,7 @@ function naviToLocalWindow() {
   if (process.platform === 'darwin') {
     console.log("Mac system detected");
     var docker = "/usr/local/bin/docker";
-    var args = ["run", "-p", "3000:3000", "-e", "DISPLAY=docker.for.mac.localhost:0", "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v2", "/start.sh"];
+    var args = ["run", "-p", "3000:3000", "-e", "DISPLAY=docker.for.mac.localhost:0", "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v3", "/start.sh"];
     var child = spawn(docker, args, {});
   };
     if (process.platform === 'linux') {
@@ -300,14 +300,14 @@ function naviToLocalWindow() {
     });
 
     var docker = "/usr/bin/docker";
-    var args = ["run", "-p", "3000:3000", "-e", displayvar, "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v2", "/start.sh"];
+    var args = ["run", "-p", "3000:3000", "-e", displayvar, "-v", "/tmp/.X11-unix:/tmp/.X11-unix", "--name", "CARTA", "ajmasiaa/newcarta_meteor_v3", "/start.sh"];
     var child = spawn(docker, args, {});
     };
 
     // Give some time for CARTA and Meteor to start up in the Docker Image 
     // (maybe not be enough time the first time it is run as the docker image will need to be downloaded first).
     // Better thing to do in next version: Wait for `websocket onopen done` to appear in the console.log and then continue
-    child_process.execSync("sleep 45");
+    child_process.execSync("sleep 5");
 
     localWindow = new BrowserWindow({width: defaultWidth, height: defaultHeight})
     localWindow.loadURL(servers.localURL);
