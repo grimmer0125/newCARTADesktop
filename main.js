@@ -307,7 +307,7 @@ function naviToLocalWindow() {
     // Give some time for CARTA and Meteor to start up in the Docker Image 
     // (maybe not be enough time the first time it is run as the docker image will need to be downloaded first).
     // Better thing to do in next version: Wait for `websocket onopen done` to appear in the console.log and then continue
-    child_process.execSync("sleep 5");
+    child_process.execSync("sleep 15");
 
     localWindow = new BrowserWindow({width: defaultWidth, height: defaultHeight})
     localWindow.loadURL(servers.localURL);
