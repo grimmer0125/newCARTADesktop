@@ -68,11 +68,14 @@ Note: On CentOS7 and Fedora (and probably RedHat), libXScrnSaver must be install
 
 ### To package the Mac and Linux Electron Apps
 
-For Mac, an installable dmg is created (non-signed). For Linux, a directory is created that can be zipped later. The Linux version can be created on a Mac, plus the Linux version is universal between RedHat and Ubuntu based systems.
+For Mac, an installable DMG is created (non-signed for now). For Linux, a directory is created that can be zipped later. The Linux version can be created on a Mac, plus the Linux version is universal between RedHat and Ubuntu based systems.
 
-1. Install the electron-packager: `meteor npm install electron-packager -g`
-2. Create Mac App: `meteor electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds`
-3. Create Linux App: `meteor electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=carta_logo_v2.png --prune=true --out=release-builds`
+1. Install the electron-packager tool: `meteor npm install electron-packager -g`
+2. Create Mac App: `electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds`
+3. Install the electron DMG installer tool: `npm install electron-installer-dmg -g`
+4. Create Mac DMG: `electron-installer-dmg --icon=assets/icons/mac/icon.icns release-builds/CARTA-Desktop-darwin-x64/CARTA-Desktop.app newCARTA-Desktop`
+
+5. Create Linux App: `electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=carta_logo_v2.png --prune=true --out=release-builds`
 
 The packaged apps can be found in the `newCARTADesktop/release-builds/` directory.
 
@@ -82,7 +85,7 @@ The packaged apps can be found in the `newCARTADesktop/release-builds/` director
 
 1. Docker and x11 can be problematic, particularly on Linux. Sometimes there can be errors such as `QXcbConnection: Could not connect to display`. I think setting `-e DISPLAY=$DISPLAY` and running `xhost +` at first helps in most cases, but I'm still investigating a guaranteed way for it to work everytime. On Mac, I think `-e DISPLAY=docker.for.mac.host.internal:0` will work every time, but still need to do more testing. On Linux, it now queries the system for $DISPLAY and uses whatever that value is in the docker command.
 2. If possible, get the app to install Docker and download the image if not already present.
-3. Currently there is a fixed pause (`child_process.execSync("sleep 45")`) after clicking Local Mode in order to give the docker image time to start up. This could be improved by having it monitoring the output log and waiting until `websocket onopen done` comes up before continuing.
+3. Currently there is a fixed pause (`child_process.execSync("sleep 5")`) after clicking Local Mode in order to give the docker image time to start up before the browser window opens and requests localhost:3000. Although startup is now quite fast, this could probably be improved by having it monitoring the output log and waiting until `websocket onopen done` comes up before continuing.
 4. Reduce size of the docker image. It is currently quite large at 1.806GB (`ajmasiaa/newcarta_meteor_v3`) but I am working on reducing the size by a few hundred megabytes.
 5. Currently some sample images are supplied in the docker image. Instead, it should mount a user's local directory so they can open their own images. This is easy to do in the docker run command with an extra -v flag; `-v <absolute path to local directory>:<absolute path to directory in docker image>`
 
