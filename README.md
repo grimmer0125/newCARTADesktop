@@ -47,8 +47,9 @@ Tested on CentOS7, Ubuntu 17.04, Fedora 24
 3. Open any web browser and go to the URL `localhost:3000`
 
 #### Mac:
-1. `docker run -p 3000:3000 -p 9999:9999 -e DISPLAY=docker.for.mac.host.internal:0 -ti -v /tmp/.X11-unix:/tmp/.X11-unix  ajmasiaa/newcarta_meteor_v3 /start.sh`
-2. Open any web browser and go to the URL `localhost:3000`
+1. `xhost +`
+2. `docker run -p 3000:3000 -p 9999:9999 -e DISPLAY=docker.for.mac.host.internal:0 -ti -v /tmp/.X11-unix:/tmp/.X11-unix  ajmasiaa/newcarta_meteor_v3 /start.sh`
+3. Open any web browser and go to the URL `localhost:3000`
 
 ---
 
