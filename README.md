@@ -5,9 +5,9 @@ The idea is to interface with newCARTA through an [Electron App](https://electro
 
 Test versions to try:
 
-`http://alma.asiaa.sinica.edu.tw/_downloads/newCARTAv2.dmg`
+`http://alma.asiaa.sinica.edu.tw/_downloads/newCARTAv3.dmg`
 
-`http://alma.asiaa.sinica.edu.tw/_downloads/CARTA-Desktop-linux-v2.tar.gz`
+`http://alma.asiaa.sinica.edu.tw/_downloads/CARTA-Desktop-linux-v3.tar.gz`
 
 ---
 
@@ -19,7 +19,7 @@ Test versions to try:
 3. `sudo systemctl enable docker` for docker to start automatically on boot.
 4. `sudo usermod -a -G docker $USER` so the normal user has permission to run docker.
 5. Log out and in, or reboot system, to enable Step 4.
-6. `docker pull ajmasiaa/newcarta_meteor_v2` to download the docker image.
+6. `docker pull ajmasiaa/newcarta_meteor_v3` to download the docker image.
 7. `xhost +` to allow x11 to work in the docker container (`sudo setenforce 0` may also be necessary)
 
 ##### Note: the script in Step 1 doesn't work for CentOS6. Instead do the following to install Docker:
@@ -32,7 +32,7 @@ Test versions to try:
 
 #### Easy way to install docker on Mac:
 1. Install Docker from the dmg: https://download.docker.com/mac/stable/Docker.dmg 
-2. `docker pull ajmasiaa/newcarta_meteor_v2`
+2. `docker pull ajmasiaa/newcarta_meteor_v3`
 
 ---
 
@@ -43,11 +43,11 @@ The docker image can be run directly for testing. The docker image itself is bas
 #### Linux:
 Tested on CentOS7, Ubuntu 17.04, Fedora 24
 1. `xhost +`
-2. `docker run -p 3000:3000 -p 9999:9999 -e DISPLAY=$DISPLAY -ti -v /tmp/.X11-unix:/tmp/.X11-unix  ajmasiaa/newcarta_meteor_v2 /start.sh`
+2. `docker run -p 3000:3000 -p 9999:9999 -e DISPLAY=$DISPLAY -ti -v /tmp/.X11-unix:/tmp/.X11-unix  ajmasiaa/newcarta_meteor_v3 /start.sh`
 3. Open any web browser and go to the URL `localhost:3000`
 
 #### Mac:
-1. `docker run -p 3000:3000 -p 9999:9999 -e DISPLAY=docker.for.mac.host.internal:0 -ti -v /tmp/.X11-unix:/tmp/.X11-unix  ajmasiaa/newcarta_meteor_v2 /start.sh`
+1. `docker run -p 3000:3000 -p 9999:9999 -e DISPLAY=docker.for.mac.host.internal:0 -ti -v /tmp/.X11-unix:/tmp/.X11-unix  ajmasiaa/newcarta_meteor_v3 /start.sh`
 2. Open any web browser and go to the URL `localhost:3000`
 
 ---
@@ -82,7 +82,7 @@ The packaged apps can be found in the `newCARTADesktop/release-builds/` director
 1. Docker and x11 can be problematic, particularly on Linux. Sometimes there can be errors such as `QXcbConnection: Could not connect to display`. I think setting `-e DISPLAY=$DISPLAY` and running `xhost +` at first helps in most cases, but I'm still investigating a guaranteed way for it to work everytime. On Mac, I think `-e DISPLAY=docker.for.mac.host.internal:0` will work every time, but still need to do more testing. On Linux, it now queries the system for $DISPLAY and uses whatever that value is in the docker command.
 2. If possible, get the app to install Docker and download the image if not already present.
 3. Currently there is a fixed pause (`child_process.execSync("sleep 45")`) after clicking Local Mode in order to give the docker image time to start up. This could be improved by having it monitoring the output log and waiting until `websocket onopen done` comes up before continuing.
-4. Reduce size of the docker image. It is currently quite large at 2.79GB (`ajmasiaa/newcarta_meteor_v2`). Hopefully it will be possible to strip out uneeded files to reduce the size.
+4. Reduce size of the docker image. It is currently quite large at 1.806GB (`ajmasiaa/newcarta_meteor_v3`) but I am working on reducing the size by a few hundred megabytes.
 5. Currently some sample images are supplied in the docker image. Instead, it should mount a user's local directory so they can open their own images. This is easy to do in the docker run command with an extra -v flag; `-v <absolute path to local directory>:<absolute path to directory in docker image>`
 
 Your comments and suggestions are welcome.
